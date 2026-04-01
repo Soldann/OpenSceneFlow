@@ -1,5 +1,5 @@
 
-dataset_path: /home/kin/data/av2/h5py/sensor
+dataset_path: /home/kin/data/av2/h5py/demo
 checkpoint: /home/kin/data/model_zoo/deltaflow_public/deltaflow-av2.ckpt
 data_mode: val # [val, test]
 save_res: False # [True, False]
