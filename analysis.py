@@ -340,9 +340,7 @@ def break_gaps_with_nan(x_data, y_data, threshold):
     y_new[np.setdiff1d(np.arange(len(y_new)), insert_indices)] = y_data
     return x_new, y_new
 
-@hydra.main(version_base=None, config_path="conf", config_name="eval")
-def main(cfg, stop_after=-1, visualize_pointclouds=False, force_recompute=False):
-    mymodel = ModelWrapper.load_from_checkpoint(cfg.checkpoint, cfg=cfg, eval=True)
+def main(stop_after=-1, visualize_pointclouds=False, force_recompute=False):
     ### LOAD THE DATASET
 
     # Path to the downloaded annotation JSON file

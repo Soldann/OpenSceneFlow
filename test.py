@@ -99,7 +99,29 @@ def main(cfg):
     }
     mymodel.cuda()
     out = mymodel.run_model_wo_ground_data(item)
-    print(out)
+    print(out[0].keys())
+    print(out[1].keys())
+    print(out[0]['pc0'].shape)
+    print(out[0]['pc1'].shape)
+    print(out[0]['pc0'][out[1]['pc0_valid_point_idxes']].shape)
+    print(out[1]['flow'].shape)
+
+    batch, res_dict = out
+    eval_mask = batch['eval_mask'].squeeze()
+    pc0 = batch['origin_pc0']
+    transform_pc0 = pc0
+    pose_flow = transform_pc0 - pc0
+
+    final_flow = pose_flow.clone()
+    if 'pc0_valid_point_idxes' in res_dict:
+        valid_from_pc2res = res_dict['pc0_valid_point_idxes']
+
+        # flow in the original pc0 coordinate
+        pred_flow = pose_flow[~batch['gm0']].clone()
+        pred_flow[valid_from_pc2res] = res_dict['flow'] + pose_flow[~batch['gm0']][valid_from_pc2res]
+        final_flow[~batch['gm0']] = pred_flow
+
+        print(final_flow.max())
 
 if __name__ == "__main__":
     main()
